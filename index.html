@@ -101,6 +101,7 @@
   .add-row-btn:hover{background:#e8f1fc;}
 
   /* ---- Gantt chart (Excel-style monthly grid) ---- */
+  .swipe-hint{display:none;font-size:0.68rem;color:var(--muted);margin:0 0 6px;}
   .gantt-panel{background:#fff;border-radius:10px;padding:16px 18px 20px;margin-bottom:22px;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
   .gantt-empty{color:var(--muted);font-size:0.85rem;padding:20px;text-align:center;}
   .gantt-scroll{overflow-x:auto;border:1px solid #d0d7e2;border-radius:6px;}
@@ -180,6 +181,73 @@
   body.view-only select.status-select{appearance:none;-webkit-appearance:none;text-align:center;}
   .loading-overlay{position:fixed;inset:0;background:rgba(238,241,246,0.85);display:none;align-items:center;justify-content:center;z-index:100;font-weight:700;color:var(--navy);font-size:0.95rem;}
   body.loading .loading-overlay{display:flex;}
+
+  /* ================= MOBILE / PHONE ================= */
+  @media screen and (max-width:760px){
+    .topbar{position:static;padding:10px 12px;gap:8px;}
+    .topbar .brand img{height:28px;}
+    .topbar .brand-text{font-size:0.92rem;}
+    .topbar .actions{gap:6px;width:100%;}
+    .btn{padding:7px 10px;font-size:0.74rem;}
+    .sync-badge{display:block;width:100%;white-space:normal;margin:2px 0 0;}
+    .wrap{margin:12px auto;padding:0 10px 40px;}
+
+    /* document info: label / value pairs stacked 2-up */
+    .doc-table, .doc-table tbody{display:block;}
+    .doc-table tr{display:grid;grid-template-columns:42% 58%;}
+    .doc-table td{display:block;width:auto !important;font-size:0.78rem;padding:7px 9px;margin:-0.5px;}
+    .doc-table td[colspan]{grid-column:1 / -1;}
+    .doc-table .logo-row img{height:44px;}
+    .doc-table input{font-size:0.78rem;}
+    .approval-table td{padding:6px 4px;font-size:0.68rem;}
+    .approval-table input{font-size:0.72rem;}
+
+    /* task table -> one card per task */
+    .task-panel{padding:12px 10px 14px;}
+    table.task-table, table.task-table tbody{display:block;}
+    table.task-table thead{display:none;}
+    table.task-table tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;position:relative;
+      border:1px solid var(--border);border-radius:9px;padding:10px 10px 10px 40px;margin-bottom:10px;background:#fbfcfe;}
+    table.task-table td{display:block;width:auto !important;padding:0;border:none;}
+    table.task-table td.col-no{position:absolute;left:8px;top:10px;width:24px !important;height:24px;border-radius:50%;
+      background:var(--navy);color:#fff;font-weight:700;font-size:0.72rem;line-height:24px;text-align:center;}
+    table.task-table td.col-task, table.task-table td.col-remark{grid-column:1 / -1;}
+    table.task-table td.col-remove{position:absolute;right:4px;top:4px;}
+    table.task-table td.col-task{padding-right:22px;}
+    table.task-table td::before{display:block;font-size:0.6rem;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px;letter-spacing:0.03em;}
+    table.task-table td.col-start::before{content:"Start / Mula";}
+    table.task-table td.col-end::before{content:"End / Tamat";}
+    table.task-table td.col-status::before{content:"Status";}
+    table.task-table td.col-pic::before{content:"PIC";}
+    table.task-table td.col-remark::before{content:"Remark / Catatan";}
+    table.task-table textarea.tk-input{font-size:0.82rem;}
+    table.task-table .tk-task{font-weight:700;}
+    body.view-only table.task-table td.col-remark:has(textarea:placeholder-shown){display:none;}
+
+    /* gantt: narrower frozen columns so the dates are visible */
+    .gantt-panel{padding:12px 8px 14px;}
+    .gantt-legend{gap:8px 12px;font-size:0.66rem;}
+    .legend-swatch{width:18px;height:12px;}
+    .gm-block.active{width:max-content;min-width:100%;}
+    .gm-head{flex-wrap:wrap;padding:8px 10px 6px;gap:4px;position:sticky;left:0;width:calc(100vw - 38px);box-sizing:border-box;z-index:4;background:#fff;}
+    .gm-head .gm-month{font-size:1.15rem;}
+    .gm-head .gm-sub{display:block;margin:2px 0 0;font-size:0.66rem;}
+    .gm-head .gm-year{font-size:1rem;}
+    table.gm-table .col-n{width:24px;min-width:24px;font-size:0.62rem;}
+    table.gm-table .sticky2{left:24px;}
+    table.gm-table .col-t{width:128px;min-width:128px;max-width:128px;}
+    table.gm-table tbody td.col-t{font-size:0.62rem;padding:4px 5px;line-height:1.25;}
+    table.gm-table .dnum th.lbl{font-size:0.62rem;padding:0 5px;}
+    table.gm-table .dnum th.day{min-width:22px;width:22px;font-size:0.62rem;}
+    table.gm-table .dow th{font-size:0.52rem;}
+    table.gm-table .col-s{width:74px;min-width:74px;}
+    table.gm-table td.st{font-size:0.56rem;}
+    table.gm-table .col-p{width:64px;min-width:64px;}
+    table.gm-table td.pc{font-size:0.6rem;padding:0 3px;}
+    .gm-tabs{gap:4px;}
+    .gm-tab{padding:6px 10px;font-size:0.74rem;}
+    .swipe-hint{display:block;}
+  }
 
   footer.app-footer{text-align:center;color:var(--muted);font-size:0.75rem;padding:20px;}
 
@@ -355,6 +423,7 @@
       <span><span class="legend-swatch" style="background:#e6ebf3;"></span> Weekend / Hujung Minggu</span>
       <span><span class="legend-swatch" style="background:#fff;box-shadow:inset 2px 0 0 #c0392b, inset -2px 0 0 #c0392b;"></span> Today / Hari Ini</span>
     </div>
+    <div class="swipe-hint">👉 Leret ke kiri/kanan untuk lihat tarikh lain · Swipe to see other dates</div>
     <div class="gantt-scroll">
       <div id="ganttGrid"></div>
     </div>
@@ -527,6 +596,16 @@ function parseLocal(iso){ const [y,m,d] = iso.split('-').map(Number); return new
 function monthKey(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'); }
 function statusLabel(st){ return st === 'Done' ? 'COMPLETE' : (st ? st.toUpperCase() : '—'); }
 
+function scrollGanttToToday(){
+  const sc = document.querySelector('.gantt-scroll');
+  if (!sc || sc.scrollWidth <= sc.clientWidth) return;
+  const blk = sc.querySelector('.gm-block.active');
+  const th = blk && blk.querySelector('th.day.today');
+  if (!th){ sc.scrollLeft = 0; return; }
+  const frozen = blk.querySelector('th.sticky2');
+  const left = frozen ? frozen.offsetLeft + frozen.offsetWidth : 0;
+  sc.scrollLeft = Math.max(0, th.offsetLeft - left - th.offsetWidth * 3);
+}
 function renderGantt(){
   const all = collectTasks();
   const tasks = all.filter(t => t.start && t.end);
@@ -604,6 +683,7 @@ function renderGantt(){
     activeMonthKey = k;
     grid.querySelectorAll('.gm-block').forEach(b => b.classList.toggle('active', b.dataset.month === k));
     tabs.querySelectorAll('.gm-tab').forEach(b => b.classList.toggle('active', b.dataset.month === k));
+    scrollGanttToToday();
   };
   const prev = document.createElement('button'); prev.className = 'nav'; prev.textContent = '‹'; prev.title = 'Previous month';
   prev.addEventListener('click', () => { if (idx() > 0) go(keys[idx() - 1]); });
@@ -620,6 +700,7 @@ function renderGantt(){
   const next = document.createElement('button'); next.className = 'nav'; next.textContent = '›'; next.title = 'Next month';
   next.addEventListener('click', () => { if (idx() < keys.length - 1) go(keys[idx() + 1]); });
   tabs.appendChild(next);
+  requestAnimationFrame(scrollGanttToToday);
 }
 
 const HEADER_FIELD_IDS = ['fldTitle','fldDocNo','fldDept','fldProject','fldManager','fldOwner','fldClass','fldRev',
