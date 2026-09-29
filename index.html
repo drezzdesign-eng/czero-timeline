@@ -247,8 +247,21 @@
     .gm-tabs{gap:4px;}
     .gm-tab{padding:6px 10px;font-size:0.74rem;}
     .swipe-hint{display:block;}
+    .gantt-scroll.frozen{max-height:calc(100vh - 90px);}
   }
 
+  /* ---- Freeze panes (dates on top + task column on left stay visible) ---- */
+  .gantt-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px;}
+  .freeze-btn{border:1px solid #c9d2de;background:#fff;color:var(--navy);padding:6px 12px;border-radius:7px;cursor:pointer;
+    font-family:inherit;font-size:0.76rem;font-weight:700;}
+  .freeze-btn.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .freeze-note{font-size:0.7rem;color:var(--muted);}
+  .gantt-scroll.frozen{max-height:calc(100vh - 150px);min-height:300px;overflow:auto;overscroll-behavior:contain;scroll-margin-top:76px;}
+  .gantt-scroll.frozen table.gm-table thead th{position:sticky;z-index:5;}
+  .gantt-scroll.frozen table.gm-table thead tr.dow th{top:0;}
+  .gantt-scroll.frozen table.gm-table thead tr.dnum th{top:22px;}
+  .gantt-scroll.frozen table.gm-table thead th.sticky, .gantt-scroll.frozen table.gm-table thead th.sticky2{z-index:7;}
+  table.gm-table .dow th{height:22px;box-sizing:border-box;}
   footer.app-footer{text-align:center;color:var(--muted);font-size:0.75rem;padding:20px;}
 
   /* ================= PRINT ================= */
@@ -280,6 +293,9 @@
     }
     .gantt-scroll{overflow:visible;border:none;}
     .gm-tabs{display:none !important;}
+    .gantt-toolbar{display:none !important;}
+    .gantt-scroll.frozen{max-height:none !important;overflow:visible !important;}
+    .gantt-scroll.frozen table.gm-table thead th{position:static !important;}
     .gm-block{display:block !important;break-inside:avoid;margin-bottom:6mm;}
     .gm-head .gm-month{font-size:12pt;} .gm-head .gm-year{font-size:10pt;}
     table.gm-table{width:100%;min-width:0;table-layout:fixed;font-size:6pt;}
@@ -422,6 +438,10 @@
       <span><span class="legend-swatch" style="background:var(--green-bar);"></span> Done / Selesai</span>
       <span><span class="legend-swatch" style="background:#e6ebf3;"></span> Weekend / Hujung Minggu</span>
       <span><span class="legend-swatch" style="background:#fff;box-shadow:inset 2px 0 0 #c0392b, inset -2px 0 0 #c0392b;"></span> Today / Hari Ini</span>
+    </div>
+    <div class="gantt-toolbar">
+      <button class="freeze-btn" id="btnFreeze" type="button">❄ Freeze</button>
+      <span class="freeze-note" id="freezeNote">Kunci baris tarikh &amp; lajur tugasan semasa scroll · Lock dates &amp; task column while scrolling</span>
     </div>
     <div class="swipe-hint">👉 Leret ke kiri/kanan untuk lihat tarikh lain · Swipe to see other dates</div>
     <div class="gantt-scroll">
@@ -819,6 +839,22 @@ document.getElementById('btnRefresh').addEventListener('click', () => {
 document.getElementById('btnSave').addEventListener('click', () => { if (ONLINE) pushRemote(); else saveLocal(); });
 document.getElementById('btnAddTask').addEventListener('click', () => { addTaskRow(); renderGantt(); saveLocal(); });
 document.getElementById('btnPrint').addEventListener('click', () => { window.print(); });
+// ---- Freeze panes toggle ----
+(function(){
+  const btn = document.getElementById('btnFreeze');
+  const sc = document.querySelector('.gantt-scroll');
+  let on = true;
+  try { const v = localStorage.getItem('czero_gantt_freeze'); if (v !== null) on = v === '1'; } catch(e){}
+  function apply(){
+    sc.classList.toggle('frozen', on);
+    btn.classList.toggle('on', on);
+    btn.textContent = on ? '❄ Freeze: ON' : '❄ Freeze: OFF';
+    try { localStorage.setItem('czero_gantt_freeze', on ? '1' : '0'); } catch(e){}
+    if (on) sc.scrollTop = 0;
+  }
+  btn.addEventListener('click', () => { on = !on; apply(); if (on) sc.scrollIntoView({behavior:'smooth', block:'start'}); });
+  apply();
+})();
 
 document.getElementById('btnExport').addEventListener('click', () => {
   const data = collectData();
